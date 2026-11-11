@@ -1,5 +1,31 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
+# Duck-a-markov
+
+A reverse, (almost) deterministic whack-a-mole game! You are a worm which must duck from a duck! The duck starts with a random view of the movement pattern of the worm, but as it watches you, learns from you! 
+
+(Concretely, it maintains a look up table of two movements, the entries of which are its prediction of your next move after them. The look up table is indexed by whether move t was even or odd, and by the exact move t+1; then it predicts movement t+2).
+
+The fact that the duck behaves deterministically (after its 2nd order Markov model of you has been filled) means it is technically possible to beat it forever! Can you do it?
+
+## Run it
+
+1. Keys 0 to 3 select the dirt patch the worm appears in.
+2. Screen flashes red when you are caught. Then the grass colour changes to indicate how many times you have been hit. After 4 hits, it resets the colour (i.e. you lost), but the duck doesn't forget you.
+
+## Files
+
+- `src/duck_a_markov.v`: the game itself: you are a worm which must dodge a duck.
+- `src/hvsync_generator.v`: makes the VGA timing (640 x 480 at 60 Hz). It is provided for you, so you do not need to write or change it. This is written by Vulkos it seems.
+
+The design drives `uo_out` in the TinyVGA PMOD order, {hsync, B0, G0, R0, vsync, B1, G1, R1}, with two bits per colour.
+
+The flow was set up by Vulkos (including a bit of this README). The code was based off their racing game but obviously heavily modified. I used some help of LLMs specially to ideate some area reductions and come up with LFSR PRNGs. The bulk of the code was written by me rushiedly; you can tell because of its jankiness.
+
+---
+
+Below is the tiny tapeout readme that came with the Vulkos flow.
+
 # Tiny Tapeout Verilog Project Template
 
 - [Read the documentation for project](docs/info.md)
