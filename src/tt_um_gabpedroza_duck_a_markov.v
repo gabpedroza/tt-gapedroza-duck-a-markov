@@ -255,6 +255,6 @@ module tt_um_gabpedroza_duck_a_markov (
     assign uio_out = 8'h00;
     assign uio_oe  = 8'h00;
 
-    wire _unused_ok = &{ena, uio_in, ui_in[7:3]};
+    wire _unused_ok = &{ena, uio_in, ui_in[7:4]};
 
 endmodule
